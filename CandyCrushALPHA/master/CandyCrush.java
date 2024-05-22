@@ -1,55 +1,10 @@
-/*
- * NAME OF CLASS: CandyCrush
- * AUTHOR: MOHAMMADREZA AMANI
- * DATE: JUN/2022
- * PURPOSE: To create a GAMEBOARD and a LOGIC for the game.
- * VERSION: 1.0
- * DETAILS: This class is the PRIMARY class for the game.
- * LOGIC:
- * 1. Create a GAMEBOARD.
- * - The GAMEBOARD is a 2D array of BUTTONS.
- * -each button is a candy.
- * -candies have a name in ij foramt that related to thei index in the array.
- * -candies have a color that is related to the name.
- * -candies have a Text that is related to the TYPE.
- * - The LOGIC of changing and destoying and filling the candies is in the
- * GAMEBOARD.
- * logic of changing:
- * "if they are CHANGEABLE then change their color and text but their name is constant."
- * logic of destroying:
- * "after checking if they are CHANGEABLE, we check their neighbors with CHANGELIST function and if they have the same color then we destroy them."
- * logic of filling:
- * "check if there is a empty button and if there is then fill it with upper candy and destroy the upper candy."
- * 2- after creating the GAMEBOARD we create a JFRAME and add the GAMEBOARD to
- * it and after that we add logic of the game to the JFRAME we have to
- * initialize the check for ending functions:
- * win function:
- * "if the high score is more than 1500 then we win."
- * lose function:
- * "if there is no more candies to move then we lose."
- * check for ending function:
- * "use CHANGEABLE function for all candies and if there is no more candies to move then we lose."
- * FUNCTIONS:
- * PUBLIC CandyCrush:
- * "constructor of the class."
- * PRIVATE VOID ACTIONLISTENER:
- * "this function is the action listener for the buttons."
- * PUBLIC VOID NEWGAME:
- * "start newgame randomly."
- * PUBLIC INT GETI:
- * "return the i of the button."
- * PUBLIC INT GETJ:
- * "return the j of the button."
- * PUBLIC VOID ACTIONPERFORMED:
- * "this function is the action performed for the buttons."
- * 
- */
- // -------------import libraries-----------------
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 import java.io.*;
+
+import static java.awt.Color.cyan;
 
 //--------------writing the class -----------------
 public class CandyCrush implements ActionListener, KeyListener {
@@ -188,7 +143,7 @@ public class CandyCrush implements ActionListener, KeyListener {
         scoreLabel.setText("Score: " + score);
         button = new JButton[10][10];
         String[] Candies = { SC };
-        Color[] Colors = { blue, red, green, yellow };
+        Color[] Colors = { cyan, red, green, yellow };
         for (int i = 0; i < 10; i++) {
             Random rand = new Random();
             Random rand1 = new Random();
@@ -201,7 +156,7 @@ public class CandyCrush implements ActionListener, KeyListener {
                 button[i][j].setBorder(BorderFactory.createEmptyBorder());
                 button[i][j].setName("" + i + j);
                 // font
-                Font font = new Font("Arial", Font.BOLD, 40);
+                Font font = new Font("Arial", Font.BOLD, 90);
                 button[i][j].setFont(font);
                 gamePanel.add(button[i][j]);
             }
@@ -891,7 +846,6 @@ public class CandyCrush implements ActionListener, KeyListener {
             for (int l = 1; l < 10; l++) {
                 try {
                     if (same(i, j, x, y + k * l)) {
-                        System.out.println("left- right: " + k);
                         count++;
                         list.add(i + "," + (y + k * l));
                         if (count > 1) {
@@ -919,7 +873,6 @@ public class CandyCrush implements ActionListener, KeyListener {
             for (int l = 1; l < 10; l++) {
                 try {
                     if (same(i, j, i + l, y)) {
-                        System.out.println("down");
                         list.add("" + (i + l) + "," + y);
                         count++;
                         if (count > 1) {
@@ -948,7 +901,6 @@ public class CandyCrush implements ActionListener, KeyListener {
             for (int l = 1; l < 10; l++) {
                 try {
                     if (same(i, j, i - l, y)) {
-                        System.out.println("up");
                         list.add("" + (i - l) + "," + y);
                         count++;
                         if (count > 1) {
@@ -984,7 +936,6 @@ public class CandyCrush implements ActionListener, KeyListener {
             for (int l = 1; l < 10; l++) {
                 try {
                     if (same(i, j, x + k * l, y)) {
-                        System.out.println("up down " + (x + k * l) + y);
                         list.add("" + (x + k * l) + "," + y);
                         count++;
                         if (count > 1) {
@@ -1016,7 +967,6 @@ public class CandyCrush implements ActionListener, KeyListener {
             for (int l = 1; l < 10; l++) {
                 try {
                     if (same(i, j, x, y + l)) {
-                        System.out.println("right");
                         list.add("" + x + "," + (y + l));
                         count++;
                         if (count > 1) {
@@ -1044,7 +994,6 @@ public class CandyCrush implements ActionListener, KeyListener {
             for (int l = 1; l < 10; l++) {
                 try {
                     if (same(i, j, x, y - l)) {
-                        System.out.println("left");
                         list.add(x + "," + (y - l));
                         count++;
                         if (count > 1) {
