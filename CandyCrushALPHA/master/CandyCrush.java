@@ -652,8 +652,11 @@ public class CandyCrush implements ActionListener, KeyListener {
         }
     }
 
+    /**
+     * Winning condition if the score if over 500 you win
+     */
     public void win() {
-        if (score >= 1500) {
+        if (score >= 500) {
             JOptionPane.showMessageDialog(null, "You Win");
             new Menu();
             frame.dispose();
