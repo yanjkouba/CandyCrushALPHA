@@ -116,9 +116,9 @@ public class CandyCrush implements ActionListener, KeyListener {
         frame.setVisible(true);
         addActionListener(this);
         lastClicked.setForeground(bg);
-        dest = new ArrayList<JButton>(); // for saving destroyed candies of row
-        dest2 = new ArrayList<JButton>(); // for saving destroyed candies of column
-        dest3 = new ArrayList<JButton>(); // for saving destroyed candies of RB
+        dest = new ArrayList<>(); // for saving destroyed candies of row
+        dest2 = new ArrayList<>(); // for saving destroyed candies of column
+        dest3 = new ArrayList<>(); // for saving destroyed candies of RB
     }
 
     private void addActionListener(CandyCrush candyCrush) { // for adding action listener
@@ -144,20 +144,27 @@ public class CandyCrush implements ActionListener, KeyListener {
         button = new JButton[10][10];
         String[] Candies = { SC };
         Color[] Colors = { cyan, red, green, yellow };
+        Random rand = new Random();
         for (int i = 0; i < 10; i++) {
-            Random rand = new Random();
-            Random rand1 = new Random();
             for (int j = 0; j < 10; j++) {
-                int r = rand.nextInt(4);
-                int r1 = rand1.nextInt(Candies.length);
-                button[i][j] = new JButton(Candies[r1]);
+                Color newColor;
+                String newIcon;
+                do {
+                    newColor = Colors[rand.nextInt(Colors.length)];
+                    newIcon = Candies[rand.nextInt(Candies.length)];
+                } while ((i > 0 && newColor.equals(button[i - 1][j].getForeground())) ||
+                        (j > 0 && newColor.equals(button[i][j - 1].getForeground())));
+
+                button[i][j] = new JButton(newIcon);
                 button[i][j].setBackground(bg2);
-                button[i][j].setForeground(Colors[r]);
+                button[i][j].setForeground(newColor);
                 button[i][j].setBorder(BorderFactory.createEmptyBorder());
                 button[i][j].setName("" + i + j);
-                // font
+
+                // Set font
                 Font font = new Font("Arial", Font.BOLD, 90);
                 button[i][j].setFont(font);
+
                 gamePanel.add(button[i][j]);
             }
         }
