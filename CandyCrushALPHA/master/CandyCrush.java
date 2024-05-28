@@ -171,6 +171,7 @@ public class CandyCrush implements ActionListener, KeyListener {
         destroy_list = new ArrayList<JButton>();
     }
 
+
     int getI(JButton b) {
         return Integer.parseInt(b.getName().substring(0, 1));
     }
