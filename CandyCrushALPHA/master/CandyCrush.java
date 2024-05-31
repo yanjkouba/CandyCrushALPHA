@@ -6,14 +6,13 @@ import java.io.*;
 
 import static java.awt.Color.cyan;
 
-//--------------writing the class -----------------
-public class CandyCrush implements ActionListener, KeyListener {
+public class CandyCrush implements ActionListener {
     static JFrame frame;
-    final String RC = "\u229B"; // for bombs
-    final String SC = "\u2299"; // for simple candy
-    final String LC = "\u211A"; // for coulmn bomb candy
-    final String LR = "\u2296"; // for row bomb candy
-    final String empty = " ";
+    final String RC = "⊛"; // for bombs
+    final String SC = "⊙"; // for simple candy
+    final String LC = "ℚ"; // for column bomb candy
+    final String LR = "⊖"; // for row bomb candy
+    //final String empty = " ";
     final Color blue = Color.blue; // for blue color of font of candy
     final Color red = Color.red; // for red color of font of candy
     final Color green = Color.green; // for green color of font of candy
@@ -23,7 +22,6 @@ public class CandyCrush implements ActionListener, KeyListener {
     final Color bg2 = new Color(0, 0, 0);
     final Color fg = Color.white; // fg for none-candies
     final Color selected = new Color(0,0,0); // for selected candy
-    final Color destoyed = Color.black; // for destroyed candy
     final Color hint = Color.gray; // for hint
     MenuBar menuBar; // for menu bar
     Menu fileMenu, helpMenu; // for menu
@@ -32,7 +30,7 @@ public class CandyCrush implements ActionListener, KeyListener {
     JLabel scoreLabel, infoLabel; // for labels
     JButton backButton; // for back button
     JButton lastClicked; // for last clicked button
-    JButton emptyButton; // for empty button
+    //JButton emptyButton; // for empty button
     JButton[][] button; // for buttons
     JButton RCButton, SCButton, LCButton, LRButton; // for buttons
     int score; // for saving score
@@ -44,13 +42,13 @@ public class CandyCrush implements ActionListener, KeyListener {
     ArrayList<JButton> dest3; // for saving destroyed candies of RB
 
     public CandyCrush() { // constructor
+        // I am sorry about the amount of code used to build this one class and create buttons, labels etc. but I just haven't found
+        // a way to implement these things in a row-saving method :(
         frame = new JFrame("Candy Crush");
         frame.setLocation(360, 0);
         frame.setSize(720, 720);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
-        // setResizable(false);
-        // setLocationRelativeTo(null);
         menuBar = new MenuBar();
         fileMenu = new Menu("File");
         helpMenu = new Menu("Help");
@@ -121,7 +119,10 @@ public class CandyCrush implements ActionListener, KeyListener {
         dest3 = new ArrayList<>(); // for saving destroyed candies of RB
     }
 
-    private void addActionListener(CandyCrush candyCrush) { // for adding action listener
+    /**
+     * Adds action listeners.
+     */
+    private void addActionListener(CandyCrush candyCrush) {
         newGame.addActionListener(candyCrush);
         LoadGame.addActionListener(candyCrush);
         SaveGame.addActionListener(candyCrush);
@@ -136,11 +137,14 @@ public class CandyCrush implements ActionListener, KeyListener {
         }
     }
 
+    /**
+     * Game creation and board generation.
+     */
     public void newGame() {
         score = 0;
         lastClicked = new JButton();
         lastClicked.setName("null");
-        scoreLabel.setText("Score: " + score);
+        scoreLabel.setText("Score (GET 500 TO WIN): " + score);
         button = new JButton[10][10];
         String[] Candies = { SC };
         Color[] Colors = { cyan, red, green, yellow };
@@ -159,7 +163,7 @@ public class CandyCrush implements ActionListener, KeyListener {
                 button[i][j].setBackground(bg2);
                 button[i][j].setForeground(newColor);
                 button[i][j].setBorder(BorderFactory.createEmptyBorder());
-                button[i][j].setName("" + i + j);
+                button[i][j].setName(String.valueOf(i) + j);
 
                 // Set font
                 Font font = new Font("Arial", Font.BOLD, 90);
@@ -168,7 +172,7 @@ public class CandyCrush implements ActionListener, KeyListener {
                 gamePanel.add(button[i][j]);
             }
         }
-        destroy_list = new ArrayList<JButton>();
+        destroy_list = new ArrayList<>();
     }
 
 
@@ -180,7 +184,10 @@ public class CandyCrush implements ActionListener, KeyListener {
         return Integer.parseInt(b.getName().substring(1, 2));
     }
 
-    // action listener
+    /**
+     * Action listener for most of the code functions.
+     * @param e the event to be processed
+     */
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == newGame) {
             newGame();
@@ -221,7 +228,7 @@ public class CandyCrush implements ActionListener, KeyListener {
                                         }
                                     }
                                     destroy();
-                                    scoreLabel.setText("Score: " + score);
+                                    scoreLabel.setText("Score (GET 500 TO WIN): " + score);
 
                                 }
                                 while (isEmpty()) {
@@ -239,6 +246,9 @@ public class CandyCrush implements ActionListener, KeyListener {
         }
     }
 
+    /**
+     * Handles and saves destructions.
+     */
     public void destroy() {
         // System.out.println(destroy_list.size());
         // //print everything in the list
@@ -249,72 +259,40 @@ public class CandyCrush implements ActionListener, KeyListener {
         // for i in the destroy list if in the dest dest2 dest3 remove
         for (int i = 0; i < dest.size(); i++) {
             if (destroy_list.contains(dest.get(i))) {
-                destroy_list.remove(destroy_list.indexOf(dest.get(i)));
+                destroy_list.remove(dest.get(i));
                 i--;
             }
         }
         for (int i = 0; i < dest2.size(); i++) {
             if (destroy_list.contains(dest2.get(i))) {
-                destroy_list.remove(destroy_list.indexOf(dest2.get(i)));
+                destroy_list.remove(dest2.get(i));
                 i--;
             }
         }
         for (int i = 0; i < dest3.size(); i++) {
             if (destroy_list.contains(dest3.get(i))) {
-                destroy_list.remove(destroy_list.indexOf(dest3.get(i)));
+                destroy_list.remove(dest3.get(i));
                 i--;
             }
         }
-        // // for i in dest3 if dest2 and dest contains it remove ftom dest and dest2
+        // // for i in dest3 if dest2 and dest contains it remove from dest and dest2
         for (int i = 0; i < dest3.size(); i++) {
             if (dest2.contains(dest3.get(i))) {
-                dest2.remove(dest2.indexOf(dest3.get(i)));
+                dest2.remove(dest3.get(i));
                 i--;
             }
             if (dest.contains(dest3.get(i))) {
-                dest.remove(dest.indexOf(dest3.get(i)));
+                dest.remove(dest3.get(i));
                 i--;
             }
        }
-        while (dest.size() > 0) {
-            try {
-                System.out.println("dest: " + dest.get(0).getName());
-                randomCandy(getI(dest.get(0)), getJ(dest.get(0)), LR);
-                dest.remove(0);
-            } catch (Exception e) {
-                // TODO: handle exception
-            }
-        }
-        while (dest2.size() > 0) {
-            try {
-                System.out.println("dest2: " + dest2.get(0).getName());
-                randomCandy(getI(dest2.get(0)), getJ(dest2.get(0)), LC);
-                dest2.remove(0);
-
-            } catch (Exception e) {
-                // TODO: handle exception
-            }
-        }
-        while (dest3.size() > 0) {
-            try {
-            System.out.println("dest3: " + dest3.get(0).getName());
-            randomCandy(getI(dest3.get(0)), getJ(dest3.get(0)), RC);
-            dest3.remove(0);
-
-            } catch (Exception e) {
-
-            }
-        }
-        for (int i = 0; i < destroy_list.size(); i++) {
-            System.out.println(destroy_list.get(i).getText());
-        }
         while (destroy_list.size() > 0) {
             if (destroy_list.get(0).getText().equals(SCButton.getText())) {
                 score += 5;
                 button[getI(destroy_list.get(0))][getJ(destroy_list.get(0))].setText(" ");
                 button[getI(destroy_list.get(0))][getJ(destroy_list.get(0))].setForeground(bg);
                 destroy_list.remove(0);
-                scoreLabel.setText("Score: " + score);
+                scoreLabel.setText("Score (GET 500 TO WIN): " + score);
             } else if (destroy_list.get(0).getText().equals(RCButton.getText())) {
                 button[getI(destroy_list.get(0))][getJ(destroy_list.get(0))].setText(SC);
                 for (int i = -1; i < 2; i++) {
@@ -328,7 +306,7 @@ public class CandyCrush implements ActionListener, KeyListener {
                 }
                 destroy_list.remove(0);
                 score += 15;
-                scoreLabel.setText("Score: " + score);
+                scoreLabel.setText("Score (GET 500 TO WIN): " + score);
                 destroy();
             } else if (destroy_list.get(0).getText().equals(LCButton.getText())) {
                 button[getI(destroy_list.get(0))][getJ(destroy_list.get(0))].setText(SC);
@@ -340,7 +318,7 @@ public class CandyCrush implements ActionListener, KeyListener {
                     }
                 }
                 score += 10;
-                scoreLabel.setText("Score: " + score);
+                scoreLabel.setText("Score (GET 500 TO WIN): " + score);
                 destroy_list.remove(0);
                 System.out.println("destroy");
                 destroy();
@@ -355,20 +333,27 @@ public class CandyCrush implements ActionListener, KeyListener {
                 }
                 destroy_list.remove(0);
                 score += 10;
-                scoreLabel.setText("Score: " + score);
+                scoreLabel.setText("Score (GET 500 TO WIN): " + score);
                 destroy();
             } else {
-                scoreLabel.setText("Score: " + score);
+                scoreLabel.setText("Score (GET 500 TO WIN): " + score);
                 destroy_list.remove(0);
             }
         }
     }
 
-    // about method show a dialog box with information about the game
+    /**
+     * About button.
+     */
     public void About() {
-        JOptionPane.showMessageDialog(null, "Candy Crush\n\n" + "Version: beta 1.1\n" + "Author: Jan Kouba\n");
-    }
+        JOptionPane.showMessageDialog(null, """
+                Candy Crush
 
+                Version: alpha 1.1
+                Author: Jan Kouba
+                """);
+    }
+    /*
     public void uh() {
         if (hi == -12) {
             return;
@@ -385,7 +370,11 @@ public class CandyCrush implements ActionListener, KeyListener {
         hy = -12;
 
     }
+     */
 
+     /**
+     Hint method.
+     */
     public void Help_me() {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -445,7 +434,9 @@ public class CandyCrush implements ActionListener, KeyListener {
         }
     }
 
-    // game over
+    /**
+    Sets when the game ends (Not by score)
+     */
     public void gameOver() {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -484,82 +475,87 @@ public class CandyCrush implements ActionListener, KeyListener {
         JOptionPane.showMessageDialog(null, "Game Over");
 
     }
-
+    /**
+    Button on the bottom right hand corner of the screen when playing (Puts you back in the menu)
+     */
     public void backButton() {
         new HomePage();
-        ((Window) CandyCrush.frame).setVisible(false);
+        CandyCrush.frame.setVisible(false);
     }
-
+    /**
+     * This is a method used to save the game. It is done by encoding the colours into letters and then CSV file (This is later used to load the game
+     * by reading the letters from the CSV file and spawning the buttons according to the letters)
+     */
     public void SaveGame() {
-        String text = "";
+        StringBuilder text = new StringBuilder();
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 if (button[i][j].getText().equals(RC)) {
-                    text += "RC";
+                    text.append("RC");
                     if (button[i][j].getForeground().equals(blue)) {
-                        text += "R";
+                        text.append("R");
                     } else if (button[i][j].getForeground().equals(red)) {
-                        text += "C";
+                        text.append("C");
                     } else if (button[i][j].getForeground().equals(green)) {
-                        text += "L";
+                        text.append("L");
                     } else if (button[i][j].getForeground().equals(yellow)) {
-                        text += "Y";
+                        text.append("Y");
                     }
                     if (j != 9) {
-                        text += ",";
+                        text.append(",");
                     }
                 } else if (button[i][j].getText().equals(LC)) {
-                    text += "LC";
+                    text.append("LC");
                     if (button[i][j].getForeground().equals(blue)) {
-                        text += "R";
+                        text.append("R");
                     } else if (button[i][j].getForeground().equals(red)) {
-                        text += "C";
+                        text.append("C");
                     } else if (button[i][j].getForeground().equals(green)) {
-                        text += "L";
+                        text.append("L");
                     } else if (button[i][j].getForeground().equals(yellow)) {
-                        text += "Y";
+                        text.append("Y");
                     }
                     if (j != 9) {
-                        text += ",";
+                        text.append(",");
                     }
                 } else if (button[i][j].getText().equals(LR)) {
-                    text += "LR";
+                    text.append("LR");
                     if (button[i][j].getForeground().equals(blue)) {
-                        text += "R";
+                        text.append("R");
                     } else if (button[i][j].getForeground().equals(red)) {
-                        text += "C";
+                        text.append("C");
                     } else if (button[i][j].getForeground().equals(green)) {
-                        text += "L";
+                        text.append("L");
                     } else if (button[i][j].getForeground().equals(yellow)) {
-                        text += "Y";
+                        text.append("Y");
                     }
                     if (j != 9) {
-                        text += ",";
+                        text.append(",");
                     }
                 } else if (button[i][j].getText().equals(SC)) {
-                    text += "SC";
+                    text.append("SC");
                     if (button[i][j].getForeground().equals(blue)) {
-                        text += "R";
+                        text.append("R");
                     } else if (button[i][j].getForeground().equals(red)) {
-                        text += "C";
+                        text.append("C");
                     } else if (button[i][j].getForeground().equals(green)) {
-                        text += "L";
+                        text.append("L");
                     } else if (button[i][j].getForeground().equals(yellow)) {
-                        text += "Y";
+                        text.append("Y");
                     }
                     if (j != 9) {
-                        text += ",";
+                        text.append(",");
                     }
                 }
 
             }
-            text += "\n";
+            text.append("\n");
         }
         try {
             FileWriter fw = new FileWriter("CandyCrush.csv");
             // show dialog box
             JOptionPane.showMessageDialog(null, "Game Saved");
-            fw.write(text);
+            fw.write(text.toString());
             fw.close();
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -567,8 +563,12 @@ public class CandyCrush implements ActionListener, KeyListener {
         }
     }
 
+    /**
+     * Finally the load method. This method first uses a fileChooser, so you can find the saved CandyCrush.csv file to import. After that everything is
+     * read and stored into a text variable and splits it into lines and reads them to set the text (again used for saving and loading) and the colour resulting
+     * in the loaded save file.
+     */
     public void LoadGame() throws IOException {
-        // create a file chooser object and save content in to text variable
         String text = "";
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showOpenDialog(null);
@@ -577,7 +577,6 @@ public class CandyCrush implements ActionListener, KeyListener {
             File selectedFile = fileChooser.getSelectedFile();
             System.out.println(selectedFile.getAbsolutePath());
             try {
-                // every thing in the file is read and stored in the text variable
                 String path = selectedFile.getAbsolutePath();
                 Scanner sc = new Scanner(new File(path));
                 System.out.println(text);
@@ -586,14 +585,11 @@ public class CandyCrush implements ActionListener, KeyListener {
                     text += "\n";
                     System.out.println(text);
                 }
-                // this get no line found error
-
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
         System.out.println(text);
-        // split the text into lines
         Scanner input = new Scanner(text);
         for (int i = 0; i < 10; i++) {
             if (input.hasNextLine()) {
@@ -605,26 +601,20 @@ public class CandyCrush implements ActionListener, KeyListener {
                     String no = next.substring(0, 2);
                     String color = next.substring(2, 3);
                     System.out.println(no + " " + color);
-                    if (no.equals("RC")) {
-                        button[i][j].setText(RC);
-                    } else if (no.equals("LC")) {
-                        button[i][j].setText(LC);
-                    } else if (no.equals("LR")) {
-                        button[i][j].setText(LR);
-                    } else if (no.equals("SC")) {
-                        button[i][j].setText(SC);
+                    switch (no) {
+                        case "RC" -> button[i][j].setText(RC);
+                        case "LC" -> button[i][j].setText(LC);
+                        case "LR" -> button[i][j].setText(LR);
+                        case "SC" -> button[i][j].setText(SC);
                     }
-                    if (color.equals("R")) {
-                        button[i][j].setForeground(red);
-                    } else if (color.equals("C")) {
-                        button[i][j].setForeground(blue);
-                    } else if (color.equals("G")) {
-                        button[i][j].setForeground(green);
-                    } else if (color.equals("Y")) {
-                        button[i][j].setForeground(yellow);
+                    switch (color) {
+                        case "R" -> button[i][j].setForeground(red);
+                        case "C" -> button[i][j].setForeground(blue);
+                        case "G" -> button[i][j].setForeground(green);
+                        case "Y" -> button[i][j].setForeground(yellow);
                     }
                     button[i][j].setBackground(bg);
-                    button[i][j].setName("" + i + j);
+                    button[i][j].setName(String.valueOf(i) + j);
                 }
             } else {
                 break;
@@ -633,16 +623,22 @@ public class CandyCrush implements ActionListener, KeyListener {
         input.close();
     }
 
+    /**
+     * Saves clicked buttons (candies) and selects it
+     */
     public void select(int i, int j) {
         lci = i;
         lcj = j;
         lastClicked.setName(button[i][j].getName());
         try {
             button[i][j].setBackground(selected);
-        } catch (Exception act) {
+        } catch (Exception ignored) {
         }
     }
 
+    /**
+     * Deselects :p
+     */
     public void deselect(int i, int j) {
         try {
             button[i][j].setBackground(bg);
@@ -653,15 +649,8 @@ public class CandyCrush implements ActionListener, KeyListener {
         }
     }
 
-    public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            new Menu();
-            frame.dispose();
-        }
-    }
-
     /**
-     * Winning condition if the score if over 500 you win
+     * Winning condition if the score is over 500 you win
      */
     public void win() {
         if (score >= 500) {
@@ -671,32 +660,9 @@ public class CandyCrush implements ActionListener, KeyListener {
         }
     }
 
-    public void saveScoreAtHS() throws IOException {
-        Scanner sc = new Scanner(new File("hs"));
-        int[] hs = new int[5];
-        for (int i = 0; i < 5; i++) {
-            hs[i] = sc.nextInt();
-        }
-        // for i in hs if score > i then insert score at i
-        for (int i = 0; i < 5; i++) {
-            if (score > hs[i]) {
-                for (int j = 4; j > i; j--) {
-                    hs[j] = hs[j - 1];
-                }
-                hs[i] = score;
-                break;
-            }
-        }
-        sc.close();
-        PrintStream ps = new PrintStream(new File("hs"));
-        for (int i = 0; i < 5; i++) {
-            ps.println(hs[i]);
-
-        }
-    }
-
     public boolean changeable(int i, int j, int x, int y) {
-        if (Math.abs(i - x) + Math.abs(j - y) > 1 || Math.abs(i - x) + Math.abs(j - y) == 0) {
+        int i1 = Math.abs(i - x) + Math.abs(j - y);
+        if ((i1 > 1) || (i1 == 0)) {
             return false;
         }
         if (same(i, j, x, y))
@@ -715,14 +681,11 @@ public class CandyCrush implements ActionListener, KeyListener {
                     } else {
                         break;
                     }
-                } catch (Exception e) {
-                    if (count > 1) {
-                        return true;
-                    }
+                } catch (Exception ignored) {
                 }
             }
             count = 0;
-            for (int l = 1; l < 3; l++) {
+            for (int l = 1; true; l++) {
                 try {
                     if (same(i, j, i + l, y)) {
                         count++;
@@ -733,11 +696,7 @@ public class CandyCrush implements ActionListener, KeyListener {
                         break;
                     }
                 } catch (Exception e) {
-                    if (count > 1) {
-                        return true;
-                    } else {
-                        break;
-                    }
+                    break;
                 }
             }
 
@@ -749,15 +708,10 @@ public class CandyCrush implements ActionListener, KeyListener {
                             return true;
                         }
                     } else {
-                        count = 0;
                         break;
                     }
                 } catch (Exception e) {
-                    if (count > 1) {
-                        return true;
-                    } else {
-                        count = 0;
-                    }
+                    count = 0;
                 }
             }
         }
@@ -765,7 +719,7 @@ public class CandyCrush implements ActionListener, KeyListener {
         if (j == y) {
             int k = x - i;
 
-            for (int l = 1; l < 3; l++) {
+            for (int l = 1; true; l++) {
                 try {
                     if (same(i, j, x + k * l, y)) {
                         count++;
@@ -777,16 +731,11 @@ public class CandyCrush implements ActionListener, KeyListener {
                         break;
                     }
                 } catch (Exception e) {
-                    if (count > 1) {
-                        return true;
-                    } else {
-                        count = 0;
-                        break;
-                    }
+                    count = 0;
+                    break;
                 }
             }
-            count = 0;
-            for (int l = 1; l < 3; l++) {
+            for (int l = 1; true; l++) {
                 try {
                     if (same(i, j, x, y + l)) {
                         count++;
@@ -797,14 +746,10 @@ public class CandyCrush implements ActionListener, KeyListener {
                         break;
                     }
                 } catch (Exception e) {
-                    if (count > 1) {
-                        return true;
-                    } else {
-                        break;
-                    }
+                    break;
                 }
             }
-            for (int l = 1; l < 3; l++) {
+            for (int l = 1; true; l++) {
                 try {
                     if (same(i, j, x, y - l)) {
                         count++;
@@ -815,11 +760,7 @@ public class CandyCrush implements ActionListener, KeyListener {
                         break;
                     }
                 } catch (Exception e) {
-                    if (count > 1) {
-                        return true;
-                    } else {
-                        break;
-                    }
+                    break;
                 }
 
             }
@@ -828,9 +769,9 @@ public class CandyCrush implements ActionListener, KeyListener {
     }
 
     public void addToDestroyList(ArrayList<String> a) {
-        for (int i = 0; i < a.size(); i++) {
-            int b = a.get(i).charAt(0) - '0';
-            int c = a.get(i).charAt(2) - '0';
+        for (String s : a) {
+            int b = s.charAt(0) - '0';
+            int c = s.charAt(2) - '0';
             // if not in destroy list add to it
             if (!destroy_list.contains(button[b][c])) {
                 destroy_list.add(button[b][c]);
@@ -839,18 +780,19 @@ public class CandyCrush implements ActionListener, KeyListener {
     }
 
     public boolean same(int i, int j, int x, int y) {
-        if (button[i][j].getForeground() == button[x][y].getForeground()) {
-            return true;
-        }
-        return false;
+        return button[i][j].getForeground() == button[x][y].getForeground();
     }
 
-    public boolean changeslist(int i, int j, int x, int y) {
-        if (Math.abs(i - x) + Math.abs(j - y) > 1 || Math.abs(i - x) + Math.abs(j - y) == 0) {
-            return false;
+    /**
+     * Changes list.
+     */
+    public void changeslist(int i, int j, int x, int y) {
+        int i1 = Math.abs(i - x) + Math.abs(j - y);
+        if (i1 > 1 || i1 == 0) {
+            return;
         }
         int count = 0;
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         if (i == x) {
             int k = y - j;
 
@@ -884,7 +826,7 @@ public class CandyCrush implements ActionListener, KeyListener {
             for (int l = 1; l < 10; l++) {
                 try {
                     if (same(i, j, i + l, y)) {
-                        list.add("" + (i + l) + "," + y);
+                        list.add((i + l) + "," + y);
                         count++;
                         if (count > 1) {
                             addToDestroyList(list);
@@ -901,18 +843,14 @@ public class CandyCrush implements ActionListener, KeyListener {
                         break;
                     }
                 } catch (Exception e) {
-                    if (count > 1) {
-                        break;
-                    } else {
-                        break;
-                    }
+                    break;
                 }
             }
 
             for (int l = 1; l < 10; l++) {
                 try {
                     if (same(i, j, i - l, y)) {
-                        list.add("" + (i - l) + "," + y);
+                        list.add((i - l) + "," + y);
                         count++;
                         if (count > 1) {
                             addToDestroyList(list);
@@ -930,13 +868,8 @@ public class CandyCrush implements ActionListener, KeyListener {
                         break;
                     }
                 } catch (Exception e) {
-                    if (count > 1) {
-                        list.clear();
-                        break;
-                    } else {
-                        list.clear();
-                        break;
-                    }
+                    list.clear();
+                    break;
                 }
             }
         }
@@ -947,7 +880,7 @@ public class CandyCrush implements ActionListener, KeyListener {
             for (int l = 1; l < 10; l++) {
                 try {
                     if (same(i, j, x + k * l, y)) {
-                        list.add("" + (x + k * l) + "," + y);
+                        list.add((x + k * l) + "," + y);
                         count++;
                         if (count > 1) {
                             addToDestroyList(list);
@@ -965,20 +898,15 @@ public class CandyCrush implements ActionListener, KeyListener {
                         break;
                     }
                 } catch (Exception e) {
-                    if (count > 1) {
-                        list.clear();
-                        break;
-                    } else {
-                        list.clear();
-                        break;
-                    }
+                    list.clear();
+                    break;
                 }
             }
             count = 0;
             for (int l = 1; l < 10; l++) {
                 try {
                     if (same(i, j, x, y + l)) {
-                        list.add("" + x + "," + (y + l));
+                        list.add(x + "," + (y + l));
                         count++;
                         if (count > 1) {
                             addToDestroyList(list);
@@ -995,11 +923,7 @@ public class CandyCrush implements ActionListener, KeyListener {
                         break;
                     }
                 } catch (Exception e) {
-                    if (count > 1) {
-                        break;
-                    } else {
-                        break;
-                    }
+                    break;
                 }
             }
             for (int l = 1; l < 10; l++) {
@@ -1024,40 +948,31 @@ public class CandyCrush implements ActionListener, KeyListener {
                 } catch (Exception e) {
                     if (count > 1) {
                         addToDestroyList(list);
-                        list.clear();
-                        break;
-                    } else {
-                        list.clear();
-                        break;
                     }
+                    list.clear();
+                    break;
                 }
 
             }
         }
         // print everything in the destroy list
-        for (int l = 0; l < dest3.size(); l++) {
-            System.out.println(dest3.get(l).getText());
+        for (JButton jButton : dest3) {
+            System.out.println(jButton.getText());
         }
-        return true;
     }
 
+    /**
+     * Does exactly what it implies.
+     */
     public void change(int i, int j, int x, int y) {
         if (!(changeable(i, j, x, y) || changeable(x, y, i, j))) {
             deselect(i, j);
-            return;
         } else {
             changeslist(i, j, x, y);
             changeslist(x, y, i, j);
-            // if (destroy_list.size() == 4)
-            // dest.add(button[i][j]);
-            // if (destroy_list.size() >= 5)
-            // dest2.add(button[i][j]);
-            // change the lastClicked
             lastClicked.setName("null");
-            // change the colors and the names and text of the button[i][j] and [x][y]
             JButton temp1 = new JButton();
             temp1.setText(button[i][j].getText());
-            // exchange the fonts and foreground colors
             temp1.setForeground(button[i][j].getForeground());
             button[i][j].setText(button[x][y].getText());
             button[i][j].setForeground(button[x][y].getForeground());
@@ -1065,23 +980,6 @@ public class CandyCrush implements ActionListener, KeyListener {
             button[x][y].setForeground(temp1.getForeground());
 
         }
-    }
-
-    public static void main(String[] args) {
-        new CandyCrush();
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-        // TODO Auto-generated method stub
-
     }
 
     public void simpleChange(int i, int j, int x, int y) {
@@ -1094,6 +992,9 @@ public class CandyCrush implements ActionListener, KeyListener {
         button[x][y].setForeground(temp1.getForeground());
     }
 
+    /**
+     * Random candies.
+     */
     public void randomCandy(int i, int j, String name) {
         Random rand1 = new Random();
         // String[] Candies = { SC };
@@ -1104,6 +1005,9 @@ public class CandyCrush implements ActionListener, KeyListener {
         button[i][j].setForeground(Colors[y]);
     }
 
+    /**
+     * Fills the board after candies have popped
+     */
     public void fill() {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -1120,6 +1024,9 @@ public class CandyCrush implements ActionListener, KeyListener {
         }
     }
 
+    /**
+     * Checks if the board is not fully filled and fills it.
+     */
     public boolean isEmpty() {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -1131,4 +1038,3 @@ public class CandyCrush implements ActionListener, KeyListener {
         return false;
     }
 }
-

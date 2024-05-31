@@ -6,7 +6,6 @@ import java.util.*;
 import javax.swing.*;
 
 public class Highscores extends JFrame {
-    // show a window with the about page
     static JFrame frame;
 
     public static void showHighScores() throws FileNotFoundException {
@@ -23,22 +22,20 @@ public class Highscores extends JFrame {
         labelPanel.setLayout(new GridLayout(1, 1));
         labelPanel.add(label);
         panel.add(labelPanel);
-        //open highscore.txt
-        File hs = new File("hs");
-        String Message = "";
-        // show text
+        File hs = new File("CandyCrushALPHA/master/hs");
+        StringBuilder Message = new StringBuilder();
         Scanner sc = new Scanner(hs);
         int i = 0;
         while(sc.hasNextLine())
         {
             i += 1;
-            Message += sc.nextLine();
-            Message += "\n";
+            Message.append(sc.nextLine());
+            Message.append("\n");
             if(i>6)
                 break;
         }
         sc.close();
-        JTextArea textArea = new JTextArea(Message);
+        JTextArea textArea = new JTextArea(Message.toString());
         textArea.setEditable(false);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);

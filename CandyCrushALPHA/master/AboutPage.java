@@ -2,8 +2,11 @@
 import java.awt.*;
 import javax.swing.*;
 public class AboutPage extends JFrame {
-    //show a window with the about page
     static JFrame frame;
+
+    /**
+     * I honestly don't think this whole class needs an explanation, and I am sorry if this offends someone.
+     */
     public static void showAboutPage() {
         frame = new JFrame("About Page");
         frame.setSize(500, 500);
@@ -19,16 +22,8 @@ public class AboutPage extends JFrame {
         labelPanel.add(label);
         panel.add(labelPanel);
         //show text
-        String Message = "⠀  ⠀   (\\__/)\n" +
-                "           (•ㅅ•)      \n" +
-                "    ＿ノヽ ノ＼＿      \n" +
-                "`/　`/ ⌒Ｙ⌒ Ｙ  ヽ     \n" +
-                "( 　(三ヽ人　 /　  |\n" +
-                "|　ﾉ⌒＼ ￣￣ヽ   ノ       boo\n" +
-                "ヽ＿＿＿＞､＿_／\n" +
-                "       ｜( 王 ﾉ〈   \n" +
-                "       /ﾐ`ー―彡\\  \n" +
-                "      / ╰    ╯ \\  \\";
+        String Message = "Welcome to a simple Candy Crush rip-off created by a humble IT student, it might not fully work because I am really bad at spotting mistakes." +
+                "THANKS FOR PLAYING";
         JTextArea textArea = new JTextArea(Message);
         textArea.setEditable(false);
         textArea.setLineWrap(true);

@@ -1,50 +1,40 @@
-
-/* 
-home page for the user to see 4 buttons to navigate to different pages
-*/
-/*buton to start new game with candy crush class
-button to load game
-button to show about page
-button to exit the game
-*/
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.io.*;
 
 public class HomePage extends JFrame implements ActionListener {
-    private JButton start, load, about, exit,Highscores1;
-    private JPanel panel;
-    private JLabel label;
-    private JPanel buttonPanel;
-    private JPanel labelPanel;
-    static JFrame frame;
+    private final JButton start;
+    private final JButton load;
+    private final JButton about;
+    private final JButton exit;
+    private final JButton Highscores1;
+    private static JFrame frame;
 
     public static void main(String[] args) {
         HomePage game = new HomePage();
         game.setVisible(true);
     }
 
+    /**
+     * Entire starting menu alignment.
+     */
     public HomePage() {
-        //desighn home page like candy crush with 5 buttons and a label
         frame = new JFrame("MENU");
         frame.setSize(800, 400);
-        //bg color 
-        frame.setBackground(Color.PINK);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //set location of the frame
-        frame.setLocation(284, 160);
+        frame.setLocation(500, 250);
         frame.setLayout(new BorderLayout());
-        panel = new JPanel();
+        JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(2, 1));
-        label = new JLabel("CANDY CRUSH");
+        JLabel label = new JLabel("CANDY CRUSH");
         label.setFont(new Font("Monospaced", Font.BOLD, 40));
         label.setHorizontalAlignment(JLabel.CENTER);
-        labelPanel = new JPanel();
+        JPanel labelPanel = new JPanel();
         labelPanel.setLayout(new GridLayout(1, 1));
         labelPanel.add(label);
         panel.add(labelPanel);
-        buttonPanel = new JPanel();
+        JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(1, 5));
         start = new JButton("Start");
         start.addActionListener(this);
@@ -54,10 +44,8 @@ public class HomePage extends JFrame implements ActionListener {
         about.addActionListener(this);
         exit = new JButton("Exit");
         exit.addActionListener(this);
-        //add highscores button
         Highscores1 = new JButton("Highscores");
         Highscores1.addActionListener(this);
-        //add highscores button
         start.setBackground(Color.black);
         start.setForeground(Color.white);
         start.setFont(new Font("Monospaced", Font.BOLD, 20));
@@ -78,7 +66,6 @@ public class HomePage extends JFrame implements ActionListener {
         buttonPanel.add(load);
         buttonPanel.add(about);
         buttonPanel.add(exit);
-        //add highscores button
         buttonPanel.add(Highscores1);
         panel.add(buttonPanel);
         frame.add(panel);
@@ -106,12 +93,8 @@ public class HomePage extends JFrame implements ActionListener {
         } else if (e.getSource() == exit) {
             System.exit(0);
         } else if (e.getSource() == Highscores1) {
-            try {
-                Highscores.showHighScores();
-            } catch (FileNotFoundException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
+                //Highscores.showHighScores();
+                JOptionPane.showMessageDialog(null,"Highscores are not avaiable due to a change of the games end goal.");
         }
 
     }
