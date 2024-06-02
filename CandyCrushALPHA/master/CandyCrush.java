@@ -5,6 +5,7 @@ import java.util.*;
 import java.io.*;
 
 import static java.awt.Color.cyan;
+import static java.awt.Color.pink;
 
 public class CandyCrush implements ActionListener {
     static JFrame frame;
@@ -16,7 +17,7 @@ public class CandyCrush implements ActionListener {
     final Color blue = Color.blue; // for blue color of font of candy
     final Color red = Color.red; // for red color of font of candy
     final Color green = Color.green; // for green color of font of candy
-    final Color yellow = Color.yellow; // for yellow color of font of candy
+    final Color pink = Color.pink; // for yellow color of font of candy
     // navy blue = rgb(0,0,128)
     final Color bg = new Color(0, 0, 0); // for background color of game
     final Color bg2 = new Color(0, 0, 0);
@@ -147,7 +148,7 @@ public class CandyCrush implements ActionListener {
         scoreLabel.setText("Score (GET 500 TO WIN): " + score);
         button = new JButton[10][10];
         String[] Candies = { SC };
-        Color[] Colors = { cyan, red, green, yellow };
+        Color[] Colors = { cyan, red, green, pink };
         Random rand = new Random();
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -498,7 +499,7 @@ public class CandyCrush implements ActionListener {
                         text.append("C");
                     } else if (button[i][j].getForeground().equals(green)) {
                         text.append("L");
-                    } else if (button[i][j].getForeground().equals(yellow)) {
+                    } else if (button[i][j].getForeground().equals(pink)) {
                         text.append("Y");
                     }
                     if (j != 9) {
@@ -512,7 +513,7 @@ public class CandyCrush implements ActionListener {
                         text.append("C");
                     } else if (button[i][j].getForeground().equals(green)) {
                         text.append("L");
-                    } else if (button[i][j].getForeground().equals(yellow)) {
+                    } else if (button[i][j].getForeground().equals(pink)) {
                         text.append("Y");
                     }
                     if (j != 9) {
@@ -526,7 +527,7 @@ public class CandyCrush implements ActionListener {
                         text.append("C");
                     } else if (button[i][j].getForeground().equals(green)) {
                         text.append("L");
-                    } else if (button[i][j].getForeground().equals(yellow)) {
+                    } else if (button[i][j].getForeground().equals(pink)) {
                         text.append("Y");
                     }
                     if (j != 9) {
@@ -540,7 +541,7 @@ public class CandyCrush implements ActionListener {
                         text.append("C");
                     } else if (button[i][j].getForeground().equals(green)) {
                         text.append("L");
-                    } else if (button[i][j].getForeground().equals(yellow)) {
+                    } else if (button[i][j].getForeground().equals(pink)) {
                         text.append("Y");
                     }
                     if (j != 9) {
@@ -611,7 +612,7 @@ public class CandyCrush implements ActionListener {
                         case "R" -> button[i][j].setForeground(red);
                         case "C" -> button[i][j].setForeground(blue);
                         case "G" -> button[i][j].setForeground(green);
-                        case "Y" -> button[i][j].setForeground(yellow);
+                        case "Y" -> button[i][j].setForeground(pink);
                     }
                     button[i][j].setBackground(bg);
                     button[i][j].setName(String.valueOf(i) + j);
@@ -998,7 +999,7 @@ public class CandyCrush implements ActionListener {
     public void randomCandy(int i, int j, String name) {
         Random rand1 = new Random();
         // String[] Candies = { SC };
-        Color[] Colors = { blue, red, green, yellow };
+        Color[] Colors = { blue, red, green, pink };
         // int x = rand.nextInt(Candies.length);
         int y = rand1.nextInt(Colors.length);
         button[i][j].setText(name);
