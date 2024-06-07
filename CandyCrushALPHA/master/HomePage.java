@@ -46,20 +46,20 @@ public class HomePage extends JFrame implements ActionListener {
         exit.addActionListener(this);
         Highscores1 = new JButton("Highscores");
         Highscores1.addActionListener(this);
-        start.setBackground(Color.black);
-        start.setForeground(Color.white);
+        start.setBackground(Color.red);
+        start.setForeground(Color.black);
         start.setFont(new Font("Monospaced", Font.BOLD, 20));
-        load.setBackground(Color.black);
-        load.setForeground(Color.white);
+        load.setBackground(Color.yellow);
+        load.setForeground(Color.black);
         load.setFont(new Font("Monospaced", Font.BOLD, 20));
-        about.setBackground(Color.black);
-        about.setForeground(Color.white);
+        about.setBackground(Color.cyan);
+        about.setForeground(Color.black);
         about.setFont(new Font("Monospaced", Font.BOLD, 20));
-        exit.setBackground(Color.black);
-        exit.setForeground(Color.white);
+        exit.setBackground(Color.green);
+        exit.setForeground(Color.black);
         exit.setFont(new Font("Monospaced", Font.BOLD, 20));
-        Highscores1.setBackground(Color.black);
-        Highscores1.setForeground(Color.white);
+        Highscores1.setBackground(Color.red);
+        Highscores1.setForeground(Color.black);
         Highscores1.setFont(new Font("Monospaced", Font.BOLD, 20));
 
         buttonPanel.add(start);
@@ -79,22 +79,17 @@ public class HomePage extends JFrame implements ActionListener {
             frame.setVisible(false);
         } else if (e.getSource() == load) {
             CandyCrush game = new CandyCrush();
-            try {
-                game.LoadGame();
-            } catch (IOException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
+            game.LoadGame();
             CandyCrush.frame.setVisible(true);
             frame.setVisible(false);
-            
+
         } else if (e.getSource() == about) {
             AboutPage.showAboutPage();
         } else if (e.getSource() == exit) {
             System.exit(0);
         } else if (e.getSource() == Highscores1) {
-                //Highscores.showHighScores();
-                JOptionPane.showMessageDialog(null,"Highscores are not avaiable due to a change of the games end goal.");
+            //Highscores.showHighScores();
+            JOptionPane.showMessageDialog(null,"Highscores are not avaiable due to a change of the games end goal.");
         }
 
     }

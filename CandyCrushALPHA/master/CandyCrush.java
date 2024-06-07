@@ -8,22 +8,22 @@ import static java.awt.Color.cyan;
 import static java.awt.Color.pink;
 
 public class CandyCrush implements ActionListener {
-    static JFrame frame;
-    final String RC = "⊛"; // for bombs
-    final String SC = "⊙"; // for simple candy
-    final String LC = "ℚ"; // for column bomb candy
-    final String LR = "⊖"; // for row bomb candy
+    public static JFrame frame;
+    public final String RC = "⊛"; // for bombs
+    public final String SC = "⊙"; // for simple candy
+    public final String LC = "ℚ"; // for column bomb candy
+    public final String LR = "⊖"; // for row bomb candy
     //final String empty = " ";
-    final Color blue = Color.blue; // for blue color of font of candy
-    final Color red = Color.red; // for red color of font of candy
-    final Color green = Color.green; // for green color of font of candy
-    final Color pink = Color.pink; // for yellow color of font of candy
+    public final Color blue = Color.cyan; // for blue color of font of candy
+    public final Color red = Color.red; // for red color of font of candy
+    public final Color green = Color.green; // for green color of font of candy
+    public final Color pink = Color.pink; // for yellow color of font of candy
     // navy blue = rgb(0,0,128)
-    final Color bg = new Color(0, 0, 0); // for background color of game
-    final Color bg2 = new Color(0, 0, 0);
-    final Color fg = Color.white; // fg for none-candies
-    final Color selected = new Color(0,0,0); // for selected candy
-    final Color hint = Color.gray; // for hint
+    public final Color bg = new Color(0, 0, 0); // for background color of game
+    public final Color bg2 = new Color(0, 0, 0);
+    public final Color fg = Color.white;
+    public final Color selected = new Color(0,0,0); // for selected candy
+    public final Color hint = Color.gray; // for hint
     MenuBar menuBar; // for menu bar
     Menu fileMenu, helpMenu; // for menu
     MenuItem newGame, LoadGame, SaveGame, Help, About, Exit; // for menu items
@@ -34,9 +34,9 @@ public class CandyCrush implements ActionListener {
     //JButton emptyButton; // for empty button
     JButton[][] button; // for buttons
     JButton RCButton, SCButton, LCButton, LRButton; // for buttons
-    int score; // for saving score
-    int lci, lcj; // for saving last clicked index
-    int hi, hj, hx, hy; // for saving hint
+    public int score; // for saving score
+    public int lci, lcj; // for saving last clicked index
+    public int hi, hj, hx, hy; // for saving hint
     ArrayList<JButton> destroy_list; // for saving destroyed candies
     ArrayList<JButton> dest; // for saving destroyed candies of row
     ArrayList<JButton> dest2; // for saving destroyed candies of column
@@ -187,18 +187,12 @@ public class CandyCrush implements ActionListener {
 
     /**
      * Action listener for most of the code functions.
-     * @param e the event to be processed
      */
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == newGame) {
             newGame();
         } else if (e.getSource() == LoadGame) {
-            try {
-                LoadGame();
-            } catch (IOException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
+            LoadGame();
         } else if (e.getSource() == SaveGame) {
             SaveGame();
         } else if (e.getSource() == Help) {
@@ -251,95 +245,62 @@ public class CandyCrush implements ActionListener {
      * Handles and saves destructions.
      */
     public void destroy() {
-        // System.out.println(destroy_list.size());
-        // //print everything in the list
-        // for (int i = 0; i < destroy_list.size(); i++) {
-        // System.out.println(destroy_list.get(i).getText());
-        // }
-        // print everything in the list
-        // for i in the destroy list if in the dest dest2 dest3 remove
-        for (int i = 0; i < dest.size(); i++) {
-            if (destroy_list.contains(dest.get(i))) {
-                destroy_list.remove(dest.get(i));
-                i--;
-            }
-        }
-        for (int i = 0; i < dest2.size(); i++) {
-            if (destroy_list.contains(dest2.get(i))) {
-                destroy_list.remove(dest2.get(i));
-                i--;
-            }
-        }
-        for (int i = 0; i < dest3.size(); i++) {
-            if (destroy_list.contains(dest3.get(i))) {
-                destroy_list.remove(dest3.get(i));
-                i--;
-            }
-        }
-        // // for i in dest3 if dest2 and dest contains it remove from dest and dest2
-        for (int i = 0; i < dest3.size(); i++) {
-            if (dest2.contains(dest3.get(i))) {
-                dest2.remove(dest3.get(i));
-                i--;
-            }
-            if (dest.contains(dest3.get(i))) {
-                dest.remove(dest3.get(i));
-                i--;
-            }
-       }
-        while (destroy_list.size() > 0) {
-            if (destroy_list.get(0).getText().equals(SCButton.getText())) {
+        // Remove elements in destroy_list that are in dest, dest2, or dest3
+        destroy_list.removeAll(dest);
+        destroy_list.removeAll(dest2);
+        destroy_list.removeAll(dest3);
+
+        // Remove elements in dest and dest2 that are also in dest3
+        dest.removeAll(dest3);
+        dest2.removeAll(dest3);
+
+        // Process each item in destroy_list
+        while (!destroy_list.isEmpty()) {
+            JButton currentButton = destroy_list.get(0);
+            if (currentButton.getText().equals(SCButton.getText())) {
+                // Handle SCButton case
                 score += 5;
-                button[getI(destroy_list.get(0))][getJ(destroy_list.get(0))].setText(" ");
-                button[getI(destroy_list.get(0))][getJ(destroy_list.get(0))].setForeground(bg);
-                destroy_list.remove(0);
-                scoreLabel.setText("Score (GET 500 TO WIN): " + score);
-            } else if (destroy_list.get(0).getText().equals(RCButton.getText())) {
-                button[getI(destroy_list.get(0))][getJ(destroy_list.get(0))].setText(SC);
+                button[getI(currentButton)][getJ(currentButton)].setText(" ");
+                button[getI(currentButton)][getJ(currentButton)].setForeground(bg);
+            } else if (currentButton.getText().equals(RCButton.getText())) {
+                // Handle RCButton case
+                button[getI(currentButton)][getJ(currentButton)].setText(SC);
                 for (int i = -1; i < 2; i++) {
                     for (int j = -1; j < 2; j++) {
                         try {
-                            destroy_list.add(button[getI(destroy_list.get(0)) + i][getJ(destroy_list.get(0)) + j]);
-                        } catch (Exception e) {
-                            // TODO: handle exception
+                            destroy_list.add(button[getI(currentButton) + i][getJ(currentButton) + j]);
+                        } catch (Exception ignored) {
                         }
                     }
                 }
-                destroy_list.remove(0);
                 score += 15;
-                scoreLabel.setText("Score (GET 500 TO WIN): " + score);
-                destroy();
-            } else if (destroy_list.get(0).getText().equals(LCButton.getText())) {
-                button[getI(destroy_list.get(0))][getJ(destroy_list.get(0))].setText(SC);
+            } else if (currentButton.getText().equals(LCButton.getText())) {
+                // Handle LCButton case
+                button[getI(currentButton)][getJ(currentButton)].setText(SC);
                 for (int i = 0; i < 10; i++) {
                     try {
-                        destroy_list.add(button[i][getJ(destroy_list.get(0))]);
-                    } catch (Exception e) {
-                        // TODO: handle exception
+                        destroy_list.add(button[i][getJ(currentButton)]);
+                    } catch (Exception ignored) {
+                        // Handle out of bounds
                     }
                 }
                 score += 10;
-                scoreLabel.setText("Score (GET 500 TO WIN): " + score);
-                destroy_list.remove(0);
-                System.out.println("destroy");
-                destroy();
-            } else if (destroy_list.get(0).getText().equals(LRButton.getText())) {
-                button[getI(destroy_list.get(0))][getJ(destroy_list.get(0))].setText(SC);
+            } else if (currentButton.getText().equals(LRButton.getText())) {
+                // Handle LRButton case
+                button[getI(currentButton)][getJ(currentButton)].setText(SC);
                 for (int j = 0; j < 10; j++) {
                     try {
-                        destroy_list.add(button[getI(destroy_list.get(0))][j]);
-                    } catch (Exception e) {
-                        // TODO: handle exception
+                        destroy_list.add(button[getI(currentButton)][j]);
+                    } catch (Exception ignored) {
+                        // Handle out of bounds
                     }
                 }
-                destroy_list.remove(0);
                 score += 10;
-                scoreLabel.setText("Score (GET 500 TO WIN): " + score);
-                destroy();
-            } else {
-                scoreLabel.setText("Score (GET 500 TO WIN): " + score);
-                destroy_list.remove(0);
             }
+
+            // Update score label and remove processed button from destroy_list
+            scoreLabel.setText("Score (GET 500 TO WIN): " + score);
+            destroy_list.remove(0);
         }
     }
 
@@ -373,7 +334,7 @@ public class CandyCrush implements ActionListener {
     }
      */
 
-     /**
+    /**
      Hint method.
      */
     public void Help_me() {
@@ -390,7 +351,6 @@ public class CandyCrush implements ActionListener {
                         return;
                     }
                 } catch (Exception e) {
-                    // TODO: handle exception
                 }
                 try {
                     if (changeable(i + 1, j, i, j)) {
@@ -403,7 +363,6 @@ public class CandyCrush implements ActionListener {
                         return;
                     }
                 } catch (Exception e) {
-                    // TODO: handle exception
                 }
                 try {
                     if (changeable(i, j + 1, i, j)) {
@@ -416,7 +375,6 @@ public class CandyCrush implements ActionListener {
                         return;
                     }
                 } catch (Exception e) {
-                    // TODO: handle exception
                 }
                 try {
                     if (changeable(i, j, i, j + 1)) {
@@ -429,14 +387,13 @@ public class CandyCrush implements ActionListener {
                         return;
                     }
                 } catch (Exception e) {
-                    // TODO: handle exception
                 }
             }
         }
     }
 
     /**
-    Sets when the game ends (Not by score)
+     Sets when the game ends (Not by score)
      */
     public void gameOver() {
         for (int i = 0; i < 10; i++) {
@@ -447,28 +404,24 @@ public class CandyCrush implements ActionListener {
                         return;
                     }
                 } catch (Exception e) {
-                    // TODO: handle exception
                 }
                 try {
                     if (changeable(i + 1, j, i, j)) {
                         return;
                     }
                 } catch (Exception e) {
-                    // TODO: handle exception
                 }
                 try {
                     if (changeable(i, j + 1, i, j)) {
                         return;
                     }
                 } catch (Exception e) {
-                    // TODO: handle exception
                 }
                 try {
                     if (changeable(i, j, i, j + 1)) {
                         return;
                     }
                 } catch (Exception e) {
-                    // TODO: handle exception
                 }
             }
         }
@@ -477,7 +430,7 @@ public class CandyCrush implements ActionListener {
 
     }
     /**
-    Button on the bottom right hand corner of the screen when playing (Puts you back in the menu)
+     Button on the bottom right hand corner of the screen when playing (Puts you back in the menu)
      */
     public void backButton() {
         new HomePage();
@@ -491,75 +444,48 @@ public class CandyCrush implements ActionListener {
         StringBuilder text = new StringBuilder();
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-                if (button[i][j].getText().equals(RC)) {
-                    text.append("RC");
-                    if (button[i][j].getForeground().equals(blue)) {
-                        text.append("R");
-                    } else if (button[i][j].getForeground().equals(red)) {
-                        text.append("C");
-                    } else if (button[i][j].getForeground().equals(green)) {
-                        text.append("L");
-                    } else if (button[i][j].getForeground().equals(pink)) {
-                        text.append("Y");
-                    }
-                    if (j != 9) {
-                        text.append(",");
-                    }
-                } else if (button[i][j].getText().equals(LC)) {
-                    text.append("LC");
-                    if (button[i][j].getForeground().equals(blue)) {
-                        text.append("R");
-                    } else if (button[i][j].getForeground().equals(red)) {
-                        text.append("C");
-                    } else if (button[i][j].getForeground().equals(green)) {
-                        text.append("L");
-                    } else if (button[i][j].getForeground().equals(pink)) {
-                        text.append("Y");
-                    }
-                    if (j != 9) {
-                        text.append(",");
-                    }
-                } else if (button[i][j].getText().equals(LR)) {
-                    text.append("LR");
-                    if (button[i][j].getForeground().equals(blue)) {
-                        text.append("R");
-                    } else if (button[i][j].getForeground().equals(red)) {
-                        text.append("C");
-                    } else if (button[i][j].getForeground().equals(green)) {
-                        text.append("L");
-                    } else if (button[i][j].getForeground().equals(pink)) {
-                        text.append("Y");
-                    }
-                    if (j != 9) {
-                        text.append(",");
-                    }
-                } else if (button[i][j].getText().equals(SC)) {
-                    text.append("SC");
-                    if (button[i][j].getForeground().equals(blue)) {
-                        text.append("R");
-                    } else if (button[i][j].getForeground().equals(red)) {
-                        text.append("C");
-                    } else if (button[i][j].getForeground().equals(green)) {
-                        text.append("L");
-                    } else if (button[i][j].getForeground().equals(pink)) {
-                        text.append("Y");
-                    }
-                    if (j != 9) {
-                        text.append(",");
-                    }
+                String candyText = button[i][j].getText();
+                String candyColor = "";
+                Color foregroundColor = button[i][j].getForeground();
+
+                // Determine candy color based on foreground color
+                if (foregroundColor.equals(Color.RED)) {
+                    candyColor = "R";
+                } else if (foregroundColor.equals(Color.CYAN)) {
+                    candyColor = "C";
+                } else if (foregroundColor.equals(Color.GREEN)) {
+                    candyColor = "L";
+                } else if (foregroundColor.equals(Color.PINK)) {
+                    candyColor = "Y";
                 }
 
+                // Append candy type and color to text
+                switch (candyText) {
+                    case RC: text.append("RC"); break;
+                    case LC: text.append("LC"); break;
+                    case LR: text.append("LR"); break;
+                    case SC: text.append("SC"); break;
+                    default: text.append("  "); break; // Empty space for non-candy cells
+                }
+
+                // Append candy color
+                text.append(candyColor);
+
+                if (j != 9) {
+                    text.append(",");
+                }
             }
             text.append("\n");
         }
+
         try {
             FileWriter fw = new FileWriter("CandyCrush.csv");
-            // show dialog box
-            JOptionPane.showMessageDialog(null, "Game Saved");
             fw.write(text.toString());
             fw.close();
+
+            // Show dialog box
+            JOptionPane.showMessageDialog(null, "Game Saved");
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -569,59 +495,65 @@ public class CandyCrush implements ActionListener {
      * read and stored into a text variable and splits it into lines and reads them to set the text (again used for saving and loading) and the colour resulting
      * in the loaded save file.
      */
-    public void LoadGame() throws IOException {
-        String text = "";
+    public void LoadGame() {
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showOpenDialog(null);
-        System.out.println(result);
+
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            System.out.println(selectedFile.getAbsolutePath());
-            try {
-                String path = selectedFile.getAbsolutePath();
-                Scanner sc = new Scanner(new File(path));
-                System.out.println(text);
-                while (sc.hasNextLine()) {
-                    text += sc.nextLine();
-                    text += "\n";
-                    System.out.println(text);
+            try (Scanner sc = new Scanner(selectedFile)) {
+                // Clear existing game board
+                clearBoard();
+
+                int row = 0;
+                while (sc.hasNextLine() && row < 10) {
+                    String line = sc.nextLine();
+                    String[] values = line.split(",");
+                    for (int col = 0; col < values.length && col < 10; col++) {
+                        String next = values[col].trim();
+                        if (next.length() >= 3) { // Check if the string is long enough
+                            String no = next.substring(0, 2);
+                            String color = next.substring(2, 3);
+
+                            switch (no) {
+                                case "RC": button[row][col].setText(RC); break;
+                                case "LC": button[row][col].setText(LC); break;
+                                case "LR": button[row][col].setText(LR); break;
+                                case "SC": button[row][col].setText(SC); break;
+                                default: button[row][col].setText(""); break; // Empty text for non-candy cells
+                            }
+
+                            switch (color) {
+                                case "R": button[row][col].setForeground(Color.RED); break;
+                                case "C": button[row][col].setForeground(Color.CYAN); break;
+                                case "L": button[row][col].setForeground(Color.GREEN); break;
+                                case "Y": button[row][col].setForeground(Color.PINK); break;
+                                default: button[row][col].setForeground(Color.BLACK); break; // Default color
+                            }
+
+                            button[row][col].setBackground(bg);
+                            button[row][col].setName(String.valueOf(row) + col);
+                        }
+                    }
+                    row++;
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
-        System.out.println(text);
-        Scanner input = new Scanner(text);
+    }
+
+
+    // Helper method to clear the game board
+    private void clearBoard() {
         for (int i = 0; i < 10; i++) {
-            if (input.hasNextLine()) {
-                String line = input.nextLine();
-                System.out.println(line);
-                for (int j = 0; j < 10; j++) {
-                    String next = line.split(",")[j];
-                    System.out.println(next);
-                    String no = next.substring(0, 2);
-                    String color = next.substring(2, 3);
-                    System.out.println(no + " " + color);
-                    switch (no) {
-                        case "RC" -> button[i][j].setText(RC);
-                        case "LC" -> button[i][j].setText(LC);
-                        case "LR" -> button[i][j].setText(LR);
-                        case "SC" -> button[i][j].setText(SC);
-                    }
-                    switch (color) {
-                        case "R" -> button[i][j].setForeground(red);
-                        case "C" -> button[i][j].setForeground(blue);
-                        case "G" -> button[i][j].setForeground(green);
-                        case "Y" -> button[i][j].setForeground(pink);
-                    }
-                    button[i][j].setBackground(bg);
-                    button[i][j].setName(String.valueOf(i) + j);
-                }
-            } else {
-                break;
+            for (int j = 0; j < 10; j++) {
+                button[i][j].setText("");
+                button[i][j].setBackground(bg);
+                button[i][j].setForeground(Color.BLACK);
+                button[i][j].setName("");
             }
         }
-        input.close();
     }
 
     /**
@@ -645,7 +577,6 @@ public class CandyCrush implements ActionListener {
             button[i][j].setBackground(bg);
             lastClicked.setName("null");
         } catch (Exception e) {
-            // TODO: handle exception
             lastClicked.setName("null");
         }
     }
@@ -835,7 +766,7 @@ public class CandyCrush implements ActionListener {
                                 dest2.add(button[x][y]);
                             }
                             if (count == 4) {
-                                
+
                                 dest3.add(button[x][y]);
 
                             }
@@ -859,7 +790,7 @@ public class CandyCrush implements ActionListener {
                                 dest2.add(button[x][y]);
                             }
                             if (count == 4) {
-                                
+
                                 dest3.add(button[x][y]);
 
                             }
@@ -889,7 +820,7 @@ public class CandyCrush implements ActionListener {
                                 dest2.add(button[x][y]);
                             }
                             if (count == 4) {
-                                
+
                                 dest3.add(button[x][y]);
 
                             }
@@ -915,7 +846,7 @@ public class CandyCrush implements ActionListener {
                                 dest.add(button[x][y]);
                             }
                             if (count == 4) {
-                                
+
                                 dest3.add(button[x][y]);
 
                             }
@@ -937,7 +868,7 @@ public class CandyCrush implements ActionListener {
                                 dest.add(button[x][y]);
                             }
                             if (count == 4) {
-                                
+
                                 dest3.add(button[x][y]);
 
                             }
@@ -999,7 +930,7 @@ public class CandyCrush implements ActionListener {
     public void randomCandy(int i, int j, String name) {
         Random rand1 = new Random();
         // String[] Candies = { SC };
-        Color[] Colors = { blue, red, green, pink };
+        Color[] Colors = { cyan, red, green, pink };
         // int x = rand.nextInt(Candies.length);
         int y = rand1.nextInt(Colors.length);
         button[i][j].setText(name);
