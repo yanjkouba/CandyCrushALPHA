@@ -384,7 +384,7 @@ public class CandyCrush implements ActionListener {
     }
 
     /**
-     Sets when the game ends (Not by score)
+     Sets when the game ends (Not by score) Basically the board runs out of moves to play
      */
     public void gameOver() {
         for (int i = 0; i < 10; i++) {
@@ -483,7 +483,7 @@ public class CandyCrush implements ActionListener {
 
     /**
      * Finally the load method. This method first uses a fileChooser, so you can find the saved CandyCrush.csv file to import. After that everything is
-     * read and stored into a text variable and splits it into lines and reads them to set the text (again used for saving and loading) and the colour resulting
+     * read and stored into a text variable and splits it into lines with regex and reads them to set the text (again used for saving and loading) and the colour resulting
      * in the loaded save file.
      */
     public void LoadGame() {
