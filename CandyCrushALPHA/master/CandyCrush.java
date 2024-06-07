@@ -22,7 +22,7 @@ public class CandyCrush implements ActionListener {
     public final Color bg = new Color(0, 0, 0); // for background color of game
     public final Color bg2 = new Color(0, 0, 0);
     public final Color fg = Color.white;
-    public final Color selected = new Color(0,0,0); // for selected candy
+    public final Color selected = new Color(0, 0, 0); // for selected candy
     public final Color hint = Color.gray; // for hint
     MenuBar menuBar; // for menu bar
     Menu fileMenu, helpMenu; // for menu
@@ -141,8 +141,8 @@ public class CandyCrush implements ActionListener {
         lastClicked.setName("null");
         scoreLabel.setText("Score (GET 500 TO WIN): " + score);
         button = new JButton[10][10];
-        String[] Candies = { SC };
-        Color[] Colors = { cyan, red, green, pink };
+        String[] Candies = {SC};
+        Color[] Colors = {cyan, red, green, pink};
         Random rand = new Random();
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -326,7 +326,7 @@ public class CandyCrush implements ActionListener {
      */
 
     /**
-     Hint method.
+     * Hint method.
      */
     public void Help_me() {
         for (int i = 0; i < 10; i++) {
@@ -384,7 +384,7 @@ public class CandyCrush implements ActionListener {
     }
 
     /**
-     Sets when the game ends (Not by score) Basically the board runs out of moves to play
+     * Sets when the game ends (Not by score) Basically the board runs out of moves to play
      */
     public void gameOver() {
         for (int i = 0; i < 10; i++) {
@@ -420,13 +420,15 @@ public class CandyCrush implements ActionListener {
         JOptionPane.showMessageDialog(null, "Game Over");
 
     }
+
     /**
-     Button on the bottom right hand corner of the screen when playing (Puts you back in the menu)
+     * Button on the bottom right hand corner of the screen when playing (Puts you back in the menu)
      */
     public void backButton() {
         new HomePage();
         CandyCrush.frame.setVisible(false);
     }
+
     /**
      * This is a method used to save the game. It is done by encoding the colours into letters and then CSV file (This is later used to load the game
      * by reading the letters from the CSV file and spawning the buttons according to the letters)
@@ -452,11 +454,21 @@ public class CandyCrush implements ActionListener {
 
                 // Append candy type and color to text
                 switch (candyText) {
-                    case RC: text.append("RC"); break;
-                    case LC: text.append("LC"); break;
-                    case LR: text.append("LR"); break;
-                    case SC: text.append("SC"); break;
-                    default: text.append("  "); break; // Empty space for non-candy cells
+                    case RC:
+                        text.append("RC");
+                        break;
+                    case LC:
+                        text.append("LC");
+                        break;
+                    case LR:
+                        text.append("LR");
+                        break;
+                    case SC:
+                        text.append("SC");
+                        break;
+                    default:
+                        text.append("  ");
+                        break; // Empty space for non-candy cells
                 }
 
                 // Append candy color
@@ -507,19 +519,39 @@ public class CandyCrush implements ActionListener {
                             String color = next.substring(2, 3);
 
                             switch (no) {
-                                case "RC": button[row][col].setText(RC); break;
-                                case "LC": button[row][col].setText(LC); break;
-                                case "LR": button[row][col].setText(LR); break;
-                                case "SC": button[row][col].setText(SC); break;
-                                default: button[row][col].setText(""); break; // Empty text for non-candy cells
+                                case "RC":
+                                    button[row][col].setText(RC);
+                                    break;
+                                case "LC":
+                                    button[row][col].setText(LC);
+                                    break;
+                                case "LR":
+                                    button[row][col].setText(LR);
+                                    break;
+                                case "SC":
+                                    button[row][col].setText(SC);
+                                    break;
+                                default:
+                                    button[row][col].setText("");
+                                    break; // Empty text for non-candy cells
                             }
 
                             switch (color) {
-                                case "R": button[row][col].setForeground(Color.RED); break;
-                                case "C": button[row][col].setForeground(Color.CYAN); break;
-                                case "L": button[row][col].setForeground(Color.GREEN); break;
-                                case "Y": button[row][col].setForeground(Color.PINK); break;
-                                default: button[row][col].setForeground(Color.BLACK); break; // Default color
+                                case "R":
+                                    button[row][col].setForeground(Color.RED);
+                                    break;
+                                case "C":
+                                    button[row][col].setForeground(Color.CYAN);
+                                    break;
+                                case "L":
+                                    button[row][col].setForeground(Color.GREEN);
+                                    break;
+                                case "Y":
+                                    button[row][col].setForeground(Color.PINK);
+                                    break;
+                                default:
+                                    button[row][col].setForeground(Color.BLACK);
+                                    break; // Default color
                             }
 
                             button[row][col].setBackground(bg);
@@ -583,7 +615,11 @@ public class CandyCrush implements ActionListener {
         }
     }
 
+    /**
+     * i j first button coordinates and x y second button coordinates
+     */
     public boolean changeable(int i, int j, int x, int y) {
+        //So its not the same
         int i1 = Math.abs(i - x) + Math.abs(j - y);
         if ((i1 > 1) || (i1 == 0)) {
             return false;
@@ -691,6 +727,9 @@ public class CandyCrush implements ActionListener {
         return false;
     }
 
+    /**
+     * Adds to destroy list.
+     */
     public void addToDestroyList(ArrayList<String> a) {
         for (String s : a) {
             int b = s.charAt(0) - '0';
@@ -708,6 +747,7 @@ public class CandyCrush implements ActionListener {
 
     /**
      * Changes list.
+     * Also, with the help of ChatGPT / https://chatgpt.com/
      */
     public void changeslist(int i, int j, int x, int y) {
         int i1 = Math.abs(i - x) + Math.abs(j - y);
@@ -921,7 +961,7 @@ public class CandyCrush implements ActionListener {
     public void randomCandy(int i, int j, String name) {
         Random rand1 = new Random();
         // String[] Candies = { SC };
-        Color[] Colors = { cyan, red, green, pink };
+        Color[] Colors = {cyan, red, green, pink};
         // int x = rand.nextInt(Candies.length);
         int y = rand1.nextInt(Colors.length);
         button[i][j].setText(name);
